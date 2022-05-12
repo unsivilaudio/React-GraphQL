@@ -1,11 +1,24 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from 'react-apollo';
+import App from './components/App';
 
-const Root = () => {
-  return <div>Lyrical</div>
+import './style/index.scss';
+
+const client = new ApolloClient({
+    link: '/graphql',
+    cache: new InMemoryCache(),
+});
+
+const Main = () => {
+    return (
+        <ApolloProvider client={client}>
+            <App />
+        </ApolloProvider>
+    );
 };
 
-ReactDOM.render(
-  <Root />,
-  document.querySelector('#root')
-);
+const root = createRoot(document.getElementById('root'));
+
+root.render(<Main />);

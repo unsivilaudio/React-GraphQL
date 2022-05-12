@@ -1,8 +1,9 @@
 const express = require('express');
-const models = require('./models');
-const { graphqlHTTP } = require('express-graphql');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const { webpack, config } = require('webpack');
+const { graphqlHTTP } = require('express-graphql');
+const webpackConfig = require('../webpack.config.js');
+const models = require('./models');
 const schema = require('./schema/schema');
 
 const app = express();
@@ -32,10 +33,21 @@ app.use(
 );
 
 try {
-    const webpackMiddleware = require('webpack-dev-middleware');
-    const webpack = require('webpack');
-    const webpackConfig = require('../webpack.config.js');
-    app.use(webpackMiddleware(webpack(webpackConfig)));
+    var compiler = webpack(webpackConfig);
+
+    app.use(
+        require('webpack-dev-middleware')(compiler, {
+            publicPath: webpackConfig.output.publicPath,
+        })
+    );
+
+    app.use(
+        require('@gatsbyjs/webpack-hot-middleware')(compiler, {
+            log: false,
+            path: '/__webpack_hmr',
+            heartbeat: 10 * 1000,
+        })
+    );
 } catch (err) {
     console.log(err.message);
 }
