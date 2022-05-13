@@ -1,0 +1,37 @@
+.Button {
+    cursor: pointer;
+    color: #ededef;
+    background: #2ebe24;
+    border: none;
+    border-radius: 0.8rem;
+    font-size: 2rem;
+    font-family: inherit;
+    padding: 0.7rem 1.4rem;
+    box-shadow: 0 2px 3px 1px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: #117b15;
+        box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+
+    &:active {
+        box-shadow: none;
+        transform: translateY(-1px);
+    }
+
+    &.Primary {
+        background: #463aed;
+        &:hover {
+            background: #2a21aa;
+        }
+    }
+
+    &.Secondary {
+        background: #d75241;
+        &:hover {
+            background: #c01c1c;
+        }
+    }
+}

@@ -1,20 +1,20 @@
+const path = require('path');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { HotModuleReplacementPlugin } = require('webpack');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-module.exports = {
-    mode: isDevelopment ? 'development' : 'production',
-    context: __dirname,
+let config = {
+    mode: 'production',
     target: 'web',
     entry: {
-        main: ['@gatsbyjs/webpack-hot-middleware/client', './client/index.js'],
+        main: [path.join(__dirname, 'client', 'index.js')],
     },
     output: {
-        path: __dirname,
+        path: path.join(__dirname, 'dist'),
         publicPath: '/',
-        filename: 'bundle.js',
+        filename: '[contenthash].bundle.js',
     },
     module: {
         rules: [
@@ -24,12 +24,6 @@ module.exports = {
                 use: [
                     {
                         loader: require.resolve('babel-loader'),
-                        options: {
-                            plugins: [
-                                isDevelopment &&
-                                    require.resolve('react-refresh/babel'),
-                            ].filter(Boolean),
-                        },
                     },
                 ],
             },
@@ -41,19 +35,36 @@ module.exports = {
                 test: /\.s[ac]ss$/i,
                 use: ['style-loader', 'css-loader', 'sass-loader'],
             },
+            {
+                test: /\.svg$/i,
+                issuer: /\.[jt]sx?$/,
+                use: ['@svgr/webpack'],
+            },
         ],
     },
     plugins: [
-        isDevelopment ? new HotModuleReplacementPlugin() : undefined,
-        isDevelopment
-            ? new ReactRefreshPlugin({
-                  overlay: {
-                      sockIntegration: 'whm',
-                  },
-              })
-            : undefined,
         new HtmlWebpackPlugin({
             template: 'client/index.html',
         }),
-    ].filter(x => x !== undefined),
+    ],
 };
+
+if (isDevelopment) {
+    config.mode = 'development';
+    config.entry.main.push('@gatsbyjs/webpack-hot-middleware/client');
+    // Babel config
+    config.module.rules[0].use[0].options = {
+        plugins: [require.resolve('react-refresh/babel')],
+    };
+    config.plugins = [
+        new HotModuleReplacementPlugin(),
+        new ReactRefreshPlugin({
+            overlay: {
+                sockIntegration: 'whm',
+            },
+        }),
+        ...config.plugins,
+    ];
+}
+
+module.exports = config;

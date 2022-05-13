@@ -1,0 +1,28 @@
+.SongListItem {
+    padding: 0.8rem 2rem;
+    display: flex;
+    align-items: center;
+
+    &:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.35);
+    }
+
+    &:nth-child(even) {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .Content {
+        flex-grow: 1;
+        flex-basis: 80%;
+    }
+
+    .Actions {
+        flex-basis: 12rem;
+
+        button {
+            font-size: 1.8rem;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+    }
+}

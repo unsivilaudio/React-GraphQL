@@ -1,0 +1,30 @@
+.InputGroup {
+    font-size: 2rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    label {
+        font-size: 1.8rem;
+        text-transform: uppercase;
+    }
+
+    input {
+        color: #3f3f3f;
+        background: #efefef;
+        margin-top: 1rem;
+        font-size: inherit;
+        font-family: inherit;
+        outline: none;
+        border: none;
+        border-radius: 0.7rem;
+        transition: all 0.3s ease;
+        padding: 0.8rem 1.2rem;
+
+        &:focus-within {
+            color: #222;
+            background: #eee;
+            box-shadow: 0 0 5px 2px rgba(55, 55, 233, 0.7);
+        }
+    }
+}

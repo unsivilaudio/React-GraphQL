@@ -1,6 +1,7 @@
+const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-const { webpack, config } = require('webpack');
+const { webpack } = require('webpack');
 const { graphqlHTTP } = require('express-graphql');
 const webpackConfig = require('../webpack.config.js');
 const models = require('./models');
@@ -35,6 +36,7 @@ app.use(
 try {
     var compiler = webpack(webpackConfig);
 
+    app.use(require('connect-history-api-fallback')());
     app.use(
         require('webpack-dev-middleware')(compiler, {
             publicPath: webpackConfig.output.publicPath,
